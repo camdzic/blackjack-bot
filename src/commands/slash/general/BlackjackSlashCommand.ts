@@ -21,6 +21,7 @@ import {
   ButtonStyle,
   type ChatInputCommandInteraction,
   type ColorResolvable,
+  MessageFlags,
   type User
 } from "discord.js";
 
@@ -145,7 +146,7 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
         embeds: [
           new ErrorEmbed("This component is meant for someone else to execute")
         ],
-        ephemeral: true
+        flags: [MessageFlags.Ephemeral]
       });
     }
 
