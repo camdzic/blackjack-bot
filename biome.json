@@ -1,0 +1,73 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "files": {
+    "include": ["*.ts", "*.js", "*.tsx", "*.jsx", "*.cjs", "*.mjs", "*.json"],
+    "ignore": ["node_modules/**/*"]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "formatWithErrors": true
+  },
+  "javascript": {
+    "formatter": {
+      "enabled": true,
+      "quoteStyle": "double",
+      "lineEnding": "lf",
+      "semicolons": "always",
+      "trailingCommas": "none",
+      "quoteProperties": "asNeeded",
+      "arrowParentheses": "asNeeded",
+      "bracketSpacing": true
+    }
+  },
+  "json": {
+    "formatter": {
+      "enabled": true,
+      "lineEnding": "lf",
+      "trailingCommas": "none"
+    }
+  },
+  "organizeImports": {
+    "enabled": true
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "style": {
+        "useConst": "warn",
+        "noVar": "error",
+        "noParameterProperties": "warn",
+        "noUselessElse": "warn",
+        "useShorthandFunctionType": "warn",
+        "useImportType": "warn"
+      },
+      "correctness": {
+        "noUnusedImports": "warn",
+        "noUnusedVariables": "warn",
+        "noUnusedFunctionParameters": "warn",
+        "noConstantCondition": "warn",
+        "noConstantMathMinMaxClamp": "warn",
+        "noConstructorReturn": "error",
+        "noUnsafeOptionalChaining": "warn"
+      },
+      "complexity": {
+        "noForEach": "warn",
+        "noExtraBooleanCast": "warn",
+        "noUselessCatch": "warn",
+        "noUselessConstructor": "warn",
+        "noUselessLabel": "warn",
+        "noUselessLoneBlockStatements": "warn",
+        "useFlatMap": "warn",
+        "useOptionalChain": "off"
+      },
+      "suspicious": {
+        "noDoubleEquals": "warn",
+        "useAwait": "warn",
+        "noExplicitAny": "off"
+      }
+    }
+  }
+}

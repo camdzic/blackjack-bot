@@ -1,0 +1,28 @@
+{
+  "name": "blackjack-bot",
+  "description": "A simple blackjack bot for Discord.",
+  "author": {
+    "name": "Aldin Čamdžić",
+    "email": "acamdzic0@proton.me"
+  },
+  "license": "CC BY-NC 4.0",
+  "module": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "dev": "bun run --watch src/index.ts",
+    "biome": "biome check --write --unsafe"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^0.1.65",
+    "colorette": "^2.0.20",
+    "discord.js": "^14.17.3"
+  }
+}
