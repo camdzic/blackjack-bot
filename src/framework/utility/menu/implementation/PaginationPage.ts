@@ -12,14 +12,19 @@ import {
   ModalBuilder,
   type ModalMessageModalSubmitInteraction,
   TextInputBuilder,
-  TextInputStyle
+  TextInputStyle,
+  type User
 } from "discord.js";
+
+type MenuState = {
+  interactor: User;
+};
 
 type PaginationPageOptions = {
   pages: BaseMenuPageRenderResult[];
 };
 
-export class PaginationPage extends BaseMenuPage {
+export class PaginationPage extends BaseMenuPage<MenuState> {
   pages: BaseMenuPageRenderResult[];
   currentPage: number;
 
@@ -55,6 +60,15 @@ export class PaginationPage extends BaseMenuPage {
   }
 
   handleButton(interaction: ButtonInteraction) {
+    if (interaction.user.id !== this.state.interactor.id) {
+      return interaction.reply({
+        embeds: [
+          new ErrorEmbed("This component is meant for someone else to execute")
+        ],
+        flags: [MessageFlags.Ephemeral]
+      });
+    }
+
     if (interaction.customId === "selectPage") {
       return interaction.showModal(
         new ModalBuilder()
