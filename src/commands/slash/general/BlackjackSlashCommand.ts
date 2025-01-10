@@ -66,7 +66,7 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
   private playerHand: Deck[] = [];
   private dealerHand: Deck[] = [];
 
-  private attachment: AttachmentBuilder;
+  private attachment: AttachmentBuilder | null = null;
 
   private gameInProgress = true;
   private overallResult: "win" | "lose" | "tie" | null = null;
