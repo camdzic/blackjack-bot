@@ -157,10 +157,10 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
         const bustedBoard = await generateBoard({
           playerHand: this.playerHand,
           dealerHand: this.dealerHand,
-          playerName: interaction.user.displayName,
-          playerImage: interaction.user.displayAvatarURL(),
+          playerName: this.state.interactor.displayName,
+          playerImage: this.state.interactor.displayAvatarURL(),
           dealerImage: container.client.user.displayAvatarURL(),
-          finishedText: `Dealer wins\n${interaction.user.displayName} busted`
+          finishedText: `Dealer wins\n${this.state.interactor.displayName} busted`
         });
         this.attachment = new AttachmentBuilder(bustedBoard, {
           name: "board.png"
@@ -175,8 +175,8 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
       const updatedBoard = await generateBoard({
         playerHand: this.playerHand,
         dealerHand: [this.dealerHand[0], this.dealerBackCard],
-        playerName: interaction.user.displayName,
-        playerImage: interaction.user.displayAvatarURL(),
+        playerName: this.state.interactor.displayName,
+        playerImage: this.state.interactor.displayAvatarURL(),
         dealerImage: container.client.user.displayAvatarURL()
       });
       this.attachment = new AttachmentBuilder(updatedBoard, {
@@ -199,13 +199,13 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
       } as Result;
 
       if (result.playerValue > 21) {
-        result.finishedText = `Dealer wins\n${interaction.user.displayName} busted`;
+        result.finishedText = `Dealer wins\n${this.state.interactor.displayName} busted`;
         this.overallResult = "lose";
       } else if (result.dealerValue > 21) {
-        result.finishedText = `Dealer busted\n${interaction.user.displayName} wins`;
+        result.finishedText = `Dealer busted\n${this.state.interactor.displayName} wins`;
         this.overallResult = "win";
       } else if (result.playerValue > result.dealerValue) {
-        result.finishedText = `${interaction.user.displayName} wins`;
+        result.finishedText = `${this.state.interactor.displayName} wins`;
         this.overallResult = "win";
       } else if (result.playerValue < result.dealerValue) {
         result.finishedText = "Dealer wins";
@@ -218,8 +218,8 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
       const finishedBoard = await generateBoard({
         playerHand: this.playerHand,
         dealerHand: this.dealerHand,
-        playerName: interaction.user.displayName,
-        playerImage: interaction.user.displayAvatarURL(),
+        playerName: this.state.interactor.displayName,
+        playerImage: this.state.interactor.displayAvatarURL(),
         dealerImage: container.client.user.displayAvatarURL(),
         finishedText: result.finishedText
       });
