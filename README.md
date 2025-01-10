@@ -2,6 +2,13 @@
 
 A simple blackjack bot for Discord.
 
+## Features
+
+* Play blackjack with the bot
+* Can be played in user's DMs or in a server
+* Slash commands
+* Image generation for the board and cards
+
 ## Showcase
 
 <p align="center">
