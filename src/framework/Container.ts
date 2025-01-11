@@ -60,28 +60,37 @@ export class Container {
     const files: any[] = [];
 
     for (const directory of directories) {
-      const entries = await readdir(directory, {
-        recursive: true
-      });
+      try {
+        const entries = await readdir(directory, {
+          recursive: true
+        });
 
-      for (const entry of entries) {
-        const entryPath = join(directory, entry);
+        for (const entry of entries) {
+          const entryPath = join(directory, entry);
 
-        if (extname(entryPath) === ".ts") {
-          const module = await import(entryPath);
+          if (extname(entryPath) === ".ts") {
+            const module = await import(entryPath);
 
-          for (const value of Object.values(module)) {
-            if (
-              typeof value === "function" &&
-              value.prototype &&
-              value.prototype.constructor
-            ) {
-              // @ts-ignore
-              const instance = new value();
-              files.push(instance);
+            for (const value of Object.values(module)) {
+              if (
+                typeof value === "function" &&
+                value.prototype &&
+                value.prototype.constructor
+              ) {
+                // @ts-ignore
+                const instance = new value();
+                files.push(instance);
+              }
             }
           }
         }
+      } catch (error) {
+        //@ts-ignore
+        if (error.code === "ENOENT") {
+          continue;
+        }
+
+        throw error;
       }
     }
 
