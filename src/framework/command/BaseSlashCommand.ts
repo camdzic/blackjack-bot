@@ -1,6 +1,7 @@
 import type { BaseGuard, BaseGuardTypeMap } from "@/framework/guard/BaseGuard";
 import type {
   ApplicationCommandOptionData,
+  AutocompleteInteraction,
   ChatInputCommandInteraction,
   PermissionResolvable
 } from "discord.js";
@@ -43,4 +44,9 @@ export abstract class BaseSlashCommand {
   }
 
   abstract execute(interaction: ChatInputCommandInteraction): unknown;
+  // biome-ignore lint/correctness/noUnusedVariables: <explanation>
+  // biome-ignore lint/correctness/noUnusedFunctionParameters: <explanation>
+  autocompleteExecute?(interaction: AutocompleteInteraction): unknown {
+    return null;
+  }
 }
