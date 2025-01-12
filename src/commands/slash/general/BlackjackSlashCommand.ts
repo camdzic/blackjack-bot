@@ -56,7 +56,7 @@ export class BlackjackSlashCommand extends BaseSlashCommand {
       state: {
         interactor: interaction.user
       },
-      threshold: 36 * 1000
+      threshold: 60 * 1000
     });
 
     menu.setPage(new BlackjackPage(deck));
