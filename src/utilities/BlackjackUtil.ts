@@ -6,16 +6,16 @@ export type Rank = {
   value: number;
 };
 
-export type Deck = {
+export type Card = {
   suit: string;
   rank: Rank;
   image: string;
 };
 
 type GenerateBoardOptions = {
-  playerHand: Deck[];
+  playerHand: Card[];
   playerName: string;
-  dealerHand: Deck[];
+  dealerHand: Card[];
   playerImage: string;
   dealerImage: string;
   finishedText?: string;
@@ -135,7 +135,7 @@ export async function generateBoard({
 
 function writeHandValue(
   context: SKRSContext2D,
-  hand: Deck[],
+  hand: Card[],
   startCoords: number[],
   endCoords: number[]
 ) {
@@ -176,7 +176,7 @@ function drawOverlay(context: SKRSContext2D, finishedText: string) {
   }
 }
 
-export function calculateHandValue(hand: Deck[]) {
+export function calculateHandValue(hand: Card[]) {
   let totalValue = 0;
   let aceCount = 0;
 
@@ -196,7 +196,7 @@ export function calculateHandValue(hand: Deck[]) {
 }
 
 export function generateDeck() {
-  const deck: Deck[] = [];
+  const deck: Card[] = [];
 
   for (const suit of suits) {
     for (const rank of ranks) {
@@ -209,7 +209,7 @@ export function generateDeck() {
   return deck;
 }
 
-function shuffleDeck(deck: Deck[]) {
+function shuffleDeck(deck: Card[]) {
   for (let i = deck.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [deck[i], deck[j]] = [deck[j], deck[i]];

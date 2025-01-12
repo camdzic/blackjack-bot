@@ -7,7 +7,7 @@ import {
 } from "@/framework";
 import { container } from "@/index";
 import {
-  type Deck,
+  type Card,
   calculateHandValue,
   generateBoard,
   generateDeck
@@ -35,7 +35,7 @@ type Result = {
 };
 
 export class BlackjackSlashCommand extends BaseSlashCommand {
-  private decks: Map<string, Deck[]> = new Map();
+  private decks: Map<string, Card[]> = new Map();
 
   constructor() {
     super({
@@ -66,17 +66,17 @@ export class BlackjackSlashCommand extends BaseSlashCommand {
 }
 
 class BlackjackPage extends BaseMenuPage<MenuState> {
-  private deck: Deck[];
+  private deck: Card[];
 
-  private playerHand: Deck[] = [];
-  private dealerHand: Deck[] = [];
+  private playerHand: Card[] = [];
+  private dealerHand: Card[] = [];
 
   private attachment: AttachmentBuilder | null = null;
 
   private gameInProgress = true;
   private overallResult: "win" | "lose" | "tie" | null = null;
 
-  constructor(deck: Deck[]) {
+  constructor(deck: Card[]) {
     super();
 
     this.deck = deck;
@@ -252,7 +252,7 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
     return this.deck.pop()!;
   }
 
-  private get dealerBackCard(): Deck {
+  private get dealerBackCard(): Card {
     return {
       suit: "",
       rank: {
