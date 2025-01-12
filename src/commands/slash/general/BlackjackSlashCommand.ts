@@ -134,8 +134,7 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
             .setDisabled(
               // biome-ignore format: <explanation>
               !this.gameInProgress ||
-              calculateHandValue(this.playerHand) === 21 ||
-              calculateHandValue(this.dealerHand) === 21
+              calculateHandValue(this.playerHand) === 21
             )
             .setCustomId("hit"),
           new ButtonBuilder()
