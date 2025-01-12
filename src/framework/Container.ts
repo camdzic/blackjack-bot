@@ -77,7 +77,7 @@ export class Container {
                 value.prototype &&
                 value.prototype.constructor
               ) {
-                // @ts-ignore
+                //@ts-ignore
                 const instance = new value();
                 files.push(instance);
               }

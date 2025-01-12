@@ -9,7 +9,6 @@ import { container } from "@/index";
 import {
   type Deck,
   calculateHandValue,
-  drawCard,
   generateBoard,
   generateDeck
 } from "@/utilities/BlackjackUtil";
@@ -36,6 +35,8 @@ type Result = {
 };
 
 export class BlackjackSlashCommand extends BaseSlashCommand {
+  private decks: Map<string, Deck[]> = new Map();
+
   constructor() {
     super({
       name: "blackjack",
@@ -46,13 +47,16 @@ export class BlackjackSlashCommand extends BaseSlashCommand {
   }
 
   execute(interaction: ChatInputCommandInteraction) {
-    const deck = generateDeck();
+    const deck = this.decks.get(interaction.user.id) || generateDeck();
+    if (!this.decks.has(interaction.user.id)) {
+      this.decks.set(interaction.user.id, deck);
+    }
 
     const menu = new BaseMenu<MenuState>({
       state: {
         interactor: interaction.user
       },
-      threshold: 30 * 1000
+      threshold: 36 * 1000
     });
 
     menu.setPage(new BlackjackPage(deck));
@@ -77,8 +81,8 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
 
     this.deck = deck;
 
-    this.playerHand = [drawCard(deck), drawCard(deck)];
-    this.dealerHand = [drawCard(deck), drawCard(deck)];
+    this.playerHand = [this.drawCard(), this.drawCard()];
+    this.dealerHand = [this.drawCard(), this.drawCard()];
   }
 
   async render() {
@@ -104,6 +108,14 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
           .setDescription(
             "Use `hit` to draw a card or `stand` to end your turn."
           )
+          .setFooter(
+            this.overallResult === null && this.deck.length
+              ? {
+                  text: `${this.deck.length} cards remaining in the deck`
+                }
+              : null
+          )
+          .setImage(`attachment://${this.attachment.name}`)
           .setColor(
             // biome-ignore format: <explanation>
             this.overallResult === null
@@ -113,7 +125,6 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
                   container.settings.getString("colors.success") as ColorResolvable :
                   container.settings.getString("colors.error") as ColorResolvable
           )
-          .setImage(`attachment://${this.attachment.name}`)
       ],
       components: [
         new ActionRowBuilder<ButtonBuilder>().setComponents(
@@ -151,7 +162,7 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
     }
 
     if (interaction.customId === "hit") {
-      this.playerHand.push(drawCard(this.deck));
+      this.playerHand.push(this.drawCard());
 
       if (calculateHandValue(this.playerHand) > 21) {
         const bustedBoard = await generateBoard({
@@ -188,7 +199,7 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
 
     if (interaction.customId === "stand") {
       while (calculateHandValue(this.dealerHand) < 17) {
-        this.dealerHand.push(drawCard(this.deck));
+        this.dealerHand.push(this.drawCard());
       }
 
       const result: Result = {
@@ -232,7 +243,16 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
     }
   }
 
-  get dealerBackCard(): Deck {
+  private drawCard() {
+    if (!this.deck.length) {
+      this.deck.push(...generateDeck());
+    }
+
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    return this.deck.pop()!;
+  }
+
+  private get dealerBackCard(): Deck {
     return {
       suit: "",
       rank: {

@@ -195,14 +195,6 @@ export function calculateHandValue(hand: Deck[]) {
   return totalValue;
 }
 
-export function drawCard(deck: Deck[]) {
-  const card = deck.pop();
-
-  if (!card) throw new Error("No more cards in the deck.");
-
-  return card;
-}
-
 export function generateDeck() {
   const deck: Deck[] = [];
 
