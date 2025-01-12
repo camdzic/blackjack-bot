@@ -1,6 +1,6 @@
 # blackjack-bot
 
-A simple blackjack bot for Discord.
+A simple blackjack bot for Discord
 
 ## Features
 
