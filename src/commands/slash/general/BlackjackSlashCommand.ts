@@ -110,7 +110,7 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
               ? container.settings.getString("colors.primary") as ColorResolvable
               : this.overallResult === "tie" ? "Orange" :
                 this.overallResult === "win" ? 
-                  container.settings.getString("colors.success") as ColorResolvable:
+                  container.settings.getString("colors.success") as ColorResolvable :
                   container.settings.getString("colors.error") as ColorResolvable
           )
           .setImage(`attachment://${this.attachment.name}`)
@@ -191,12 +191,11 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
         this.dealerHand.push(drawCard(this.deck));
       }
 
-      const result = {
+      const result: Result = {
         playerValue: calculateHandValue(this.playerHand),
         dealerValue: calculateHandValue(this.dealerHand),
-        finishedText: null,
-        overallResult: null
-      } as Result;
+        finishedText: null
+      };
 
       if (result.playerValue > 21) {
         result.finishedText = `Dealer wins\n${this.state.interactor.displayName} busted`;
@@ -228,11 +227,12 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
       });
 
       this.gameInProgress = false;
+
       return interaction.update(await this.render());
     }
   }
 
-  get dealerBackCard() {
+  get dealerBackCard(): Deck {
     return {
       suit: "",
       rank: {
@@ -240,6 +240,6 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
         value: 0
       },
       image: "backCard.png"
-    } as Deck;
+    };
   }
 }
