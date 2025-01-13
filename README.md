@@ -6,6 +6,7 @@ A simple blackjack bot for Discord
 
 * Play blackjack with the bot
 * Can be played in user's DMs or in a server
+* Decks are not shuffled after each round so card counting is possible (each player has their own deck)
 * Slash commands
 * Image generation for the board and cards
 
