@@ -74,43 +74,8 @@ export async function generateBoard({
   const playerAvatar = await loadImage(playerImage);
   context.drawImage(playerAvatar, 472, 214, 100, 100);
 
-  let dealerCardX = 152;
-  for (const card of dealerHand) {
-    const cardImage = await loadImage(
-      path.join(
-        __dirname,
-        "..",
-        "..",
-        "assets",
-        "images",
-        "blackjack",
-        "cards",
-        card.image
-      )
-    );
-    context.drawImage(cardImage, dealerCardX, 44);
-
-    dealerCardX += 74;
-  }
-
-  let playerCardX = 396;
-  for (const card of playerHand) {
-    const cardImage = await loadImage(
-      path.join(
-        __dirname,
-        "..",
-        "..",
-        "assets",
-        "images",
-        "blackjack",
-        "cards",
-        card.image
-      )
-    );
-    context.drawImage(cardImage, playerCardX, 214);
-
-    playerCardX -= 74;
-  }
+  await drawCards(context, dealerHand, 152, 44, 1);
+  await drawCards(context, playerHand, 396, 214, -1);
 
   context.font = "bold 24px Poppins";
   context.fillStyle = "#FFFFFF";
@@ -133,18 +98,54 @@ export async function generateBoard({
   return canvas.toBuffer("image/png");
 }
 
+async function drawCards(
+  context: SKRSContext2D,
+  hand: Card[],
+  startX: number,
+  startY: number,
+  direction: number
+) {
+  const cardWidth = 72;
+  const maxCards = hand.length;
+  const availableWidth = cardWidth * maxCards;
+
+  const spacing = Math.min(cardWidth, availableWidth / maxCards);
+
+  for (const card of hand) {
+    const cardImage = await loadImage(
+      path.join(
+        __dirname,
+        "..",
+        "..",
+        "assets",
+        "images",
+        "blackjack",
+        "cards",
+        card.image
+      )
+    );
+    context.drawImage(cardImage, startX, startY);
+
+    // biome-ignore lint/style/noParameterAssign: <explanation>
+    startX += direction * spacing;
+  }
+}
+
 function writeHandValue(
   context: SKRSContext2D,
   hand: Card[],
   startCoords: number[],
   endCoords: number[]
 ) {
-  const handValue = calculateHandValue(hand);
+  const handValue = hand.reduce((acc, card) => acc + card.rank.value, 0);
   const hasAce = hand.some(card => card.rank.name === "ace");
+
   const displayValue =
-    hasAce && handValue !== 21
-      ? `${handValue - 10}/${handValue}`
-      : handValue.toString();
+    hasAce && handValue + 10 <= 21
+      ? handValue + 10 === 21
+        ? `${handValue + 10}`
+        : `${handValue} / ${handValue + 10}`
+      : `${handValue}`;
 
   context.fillStyle = "#ffffff";
   context.font = "bold 26px Poppins";
@@ -188,8 +189,9 @@ export function calculateHandValue(hand: Card[]) {
     }
   }
 
-  for (let i = 0; i < aceCount; i++) {
-    if (totalValue + 10 <= 21) totalValue += 10;
+  while (aceCount > 0 && totalValue + 10 <= 21) {
+    totalValue += 10;
+    aceCount--;
   }
 
   return totalValue;
