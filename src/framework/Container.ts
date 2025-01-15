@@ -131,9 +131,8 @@ export class Container {
       this.contextMenuCommands.push(command);
     }
 
-    this.logger.info(`Loaded ${this.slashCommands.length} slash commands`);
     this.logger.info(
-      `Loaded ${this.contextMenuCommands.length} context menu commands`
+      `Loaded ${this.slashCommands.length + this.contextMenuCommands.length} commands (${this.slashCommands.length} slash, ${this.contextMenuCommands.length} context menu)`
     );
   }
 
