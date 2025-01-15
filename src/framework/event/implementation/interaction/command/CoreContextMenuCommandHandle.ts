@@ -45,7 +45,7 @@ export class CoreContextMenuCommandHandle extends BaseEvent<"interactionCreate">
     if (!contextMenuCommand) {
       interaction.reply({
         embeds: [new ErrorEmbed("Unable to find wanted context menu command")],
-        flags: [MessageFlags.Ephemeral]
+        flags: MessageFlags.Ephemeral
       });
       return;
     }
@@ -73,7 +73,7 @@ export class CoreContextMenuCommandHandle extends BaseEvent<"interactionCreate">
               "You cannot use this context menu command due to a lack of guards"
             )
           ],
-          flags: [MessageFlags.Ephemeral]
+          flags: MessageFlags.Ephemeral
         });
         return;
       }
@@ -99,7 +99,7 @@ export class CoreContextMenuCommandHandle extends BaseEvent<"interactionCreate">
             )
           ],
           components: [],
-          flags: [MessageFlags.Ephemeral]
+          flags: MessageFlags.Ephemeral
         });
       }
 

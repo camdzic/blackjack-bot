@@ -65,7 +65,7 @@ export class PaginationPage extends BaseMenuPage<MenuState> {
         embeds: [
           new ErrorEmbed("This component is meant for someone else to execute")
         ],
-        flags: [MessageFlags.Ephemeral]
+        flags: MessageFlags.Ephemeral
       });
     }
 
@@ -114,7 +114,7 @@ export class PaginationPage extends BaseMenuPage<MenuState> {
             `Invalid page number. Please enter a number between 1 and ${this.pages.length}.`
           )
         ],
-        flags: [MessageFlags.Ephemeral]
+        flags: MessageFlags.Ephemeral
       });
     }
 

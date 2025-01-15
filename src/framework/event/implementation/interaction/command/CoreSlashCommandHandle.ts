@@ -21,7 +21,7 @@ export class CoreSlashCommandHandle extends BaseEvent<"interactionCreate"> {
       if (!slashCommand) {
         interaction.reply({
           embeds: [new ErrorEmbed("Unable to find wanted slash command")],
-          flags: [MessageFlags.Ephemeral]
+          flags: MessageFlags.Ephemeral
         });
         return;
       }
@@ -49,7 +49,7 @@ export class CoreSlashCommandHandle extends BaseEvent<"interactionCreate"> {
                 "You cannot use this slash command due to a lack of guards"
               )
             ],
-            flags: [MessageFlags.Ephemeral]
+            flags: MessageFlags.Ephemeral
           });
           return;
         }
@@ -75,7 +75,7 @@ export class CoreSlashCommandHandle extends BaseEvent<"interactionCreate"> {
               )
             ],
             components: [],
-            flags: [MessageFlags.Ephemeral]
+            flags: MessageFlags.Ephemeral
           });
         }
 

@@ -156,7 +156,7 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
         embeds: [
           new ErrorEmbed("This component is meant for someone else to execute")
         ],
-        flags: [MessageFlags.Ephemeral]
+        flags: MessageFlags.Ephemeral
       });
     }
 

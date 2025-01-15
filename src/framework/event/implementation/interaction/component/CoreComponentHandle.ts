@@ -65,7 +65,7 @@ export class CoreComponentHandle extends BaseEvent<"interactionCreate"> {
         embeds: [
           new ErrorEmbed("This component is meant for someone else to execute")
         ],
-        flags: [MessageFlags.Ephemeral]
+        flags: MessageFlags.Ephemeral
       });
       return;
     }
@@ -112,7 +112,7 @@ export class CoreComponentHandle extends BaseEvent<"interactionCreate"> {
             )
           ],
           components: [],
-          flags: [MessageFlags.Ephemeral]
+          flags: MessageFlags.Ephemeral
         });
       }
 

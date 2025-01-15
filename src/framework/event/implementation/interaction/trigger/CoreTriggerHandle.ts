@@ -83,7 +83,7 @@ export class CoreTriggerHandle extends BaseEvent<"interactionCreate"> {
               `You cannot use this ${type} due to a lack of guards`
             )
           ],
-          flags: [MessageFlags.Ephemeral]
+          flags: MessageFlags.Ephemeral
         });
         return;
       }
@@ -109,7 +109,7 @@ export class CoreTriggerHandle extends BaseEvent<"interactionCreate"> {
             )
           ],
           components: [],
-          flags: [MessageFlags.Ephemeral]
+          flags: MessageFlags.Ephemeral
         });
       }
 
