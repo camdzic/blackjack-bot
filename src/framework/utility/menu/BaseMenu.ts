@@ -1,5 +1,6 @@
 import { MenuException } from "@/framework/exception/MenuException";
 import type { BaseMenuPage } from "@/framework/utility/menu/BaseMenuPage";
+import { container } from "@/index";
 import {
   ActionRowBuilder,
   type CollectedInteraction,
@@ -73,62 +74,67 @@ export class BaseMenu<T> {
     });
 
     this.collector.on("collect", async interaction => {
-      if (interaction.isButton()) {
-        if (!this.page.handleButton) {
-          throw new MenuException(
-            "Button interaction is not supported in this menu page."
-          );
-        }
+      try {
+        if (interaction.isButton()) {
+          if (!this.page.handleButton) {
+            throw new MenuException(
+              "Button interaction is not supported in this menu page."
+            );
+          }
 
-        await this.page.handleButton(interaction);
-      } else if (interaction.isStringSelectMenu()) {
-        if (!this.page.handleStringSelectMenu) {
-          throw new MenuException(
-            "String select menu interaction is not supported in this menu page."
-          );
-        }
+          await this.page.handleButton(interaction);
+        } else if (interaction.isStringSelectMenu()) {
+          if (!this.page.handleStringSelectMenu) {
+            throw new MenuException(
+              "String select menu interaction is not supported in this menu page."
+            );
+          }
 
-        await this.page.handleStringSelectMenu(interaction);
-      } else if (interaction.isChannelSelectMenu()) {
-        if (!this.page.handleChannelSelectMenu) {
-          throw new MenuException(
-            "Channel select menu interaction is not supported in this menu page."
-          );
-        }
+          await this.page.handleStringSelectMenu(interaction);
+        } else if (interaction.isChannelSelectMenu()) {
+          if (!this.page.handleChannelSelectMenu) {
+            throw new MenuException(
+              "Channel select menu interaction is not supported in this menu page."
+            );
+          }
 
-        await this.page.handleChannelSelectMenu(interaction);
-      } else if (interaction.isRoleSelectMenu()) {
-        if (!this.page.handleRoleSelectMenu) {
-          throw new MenuException(
-            "Role select menu interaction is not supported in this menu page."
-          );
-        }
+          await this.page.handleChannelSelectMenu(interaction);
+        } else if (interaction.isRoleSelectMenu()) {
+          if (!this.page.handleRoleSelectMenu) {
+            throw new MenuException(
+              "Role select menu interaction is not supported in this menu page."
+            );
+          }
 
-        await this.page.handleRoleSelectMenu(interaction);
-      } else if (interaction.isMentionableSelectMenu()) {
-        if (!this.page.handleMentionableSelectMenu) {
-          throw new MenuException(
-            "Mentionable select menu interaction is not supported in this menu page."
-          );
-        }
+          await this.page.handleRoleSelectMenu(interaction);
+        } else if (interaction.isMentionableSelectMenu()) {
+          if (!this.page.handleMentionableSelectMenu) {
+            throw new MenuException(
+              "Mentionable select menu interaction is not supported in this menu page."
+            );
+          }
 
-        await this.page.handleMentionableSelectMenu(interaction);
-      } else if (interaction.isUserSelectMenu()) {
-        if (!this.page.handleUserSelectMenu) {
-          throw new MenuException(
-            "User select menu interaction is not supported in this menu page."
-          );
-        }
+          await this.page.handleMentionableSelectMenu(interaction);
+        } else if (interaction.isUserSelectMenu()) {
+          if (!this.page.handleUserSelectMenu) {
+            throw new MenuException(
+              "User select menu interaction is not supported in this menu page."
+            );
+          }
 
-        await this.page.handleUserSelectMenu(interaction);
-      } else if (interaction.isModalSubmit() && interaction.isFromMessage()) {
-        if (!this.page.handleModal) {
-          throw new MenuException(
-            "Modal submit interaction is not supported in this menu page."
-          );
-        }
+          await this.page.handleUserSelectMenu(interaction);
+        } else if (interaction.isModalSubmit() && interaction.isFromMessage()) {
+          if (!this.page.handleModal) {
+            throw new MenuException(
+              "Modal submit interaction is not supported in this menu page."
+            );
+          }
 
-        await this.page.handleModal(interaction);
+          await this.page.handleModal(interaction);
+        }
+      } catch (error) {
+        container.logger.error("Failed to execute menu interaction");
+        container.logger.error(error);
       }
 
       this.message = await interaction.fetchReply();
