@@ -6,6 +6,7 @@ import { container } from "@/index";
 import {
   type ButtonInteraction,
   type ChannelSelectMenuInteraction,
+  DiscordAPIError,
   type Interaction,
   type MentionableSelectMenuInteraction,
   MessageFlags,
@@ -93,7 +94,7 @@ export class CoreComponentHandle extends BaseEvent<"interactionCreate"> {
       } else {
         stop();
       }
-    } catch {
+    } catch (error) {
       if (interaction.deferred || interaction.replied) {
         interaction.editReply({
           embeds: [
@@ -116,6 +117,10 @@ export class CoreComponentHandle extends BaseEvent<"interactionCreate"> {
       }
 
       container.logger.error(`Failed to execute ${type} component`);
+
+      if (!(error instanceof DiscordAPIError)) {
+        container.logger.error(error);
+      }
     }
   }
 }

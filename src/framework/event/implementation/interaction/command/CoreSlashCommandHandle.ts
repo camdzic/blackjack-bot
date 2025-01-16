@@ -3,7 +3,7 @@ import { GuardException } from "@/framework/exception/GuardException";
 import type { BaseGuard, BaseGuardTypeMap } from "@/framework/guard/BaseGuard";
 import { ErrorEmbed } from "@/framework/utility/embeds/ErrorEmbed";
 import { container } from "@/index";
-import { type Interaction, MessageFlags } from "discord.js";
+import { DiscordAPIError, type Interaction, MessageFlags } from "discord.js";
 
 export class CoreSlashCommandHandle extends BaseEvent<"interactionCreate"> {
   constructor() {
@@ -55,7 +55,7 @@ export class CoreSlashCommandHandle extends BaseEvent<"interactionCreate"> {
 
       try {
         await slashCommand.execute(interaction);
-      } catch {
+      } catch (error) {
         if (interaction.deferred || interaction.replied) {
           interaction.editReply({
             embeds: [
@@ -80,6 +80,10 @@ export class CoreSlashCommandHandle extends BaseEvent<"interactionCreate"> {
         container.logger.error(
           `Failed to execute ${slashCommand.constructor.name}`
         );
+
+        if (!(error instanceof DiscordAPIError)) {
+          container.logger.error(error);
+        }
       }
     } else if (interaction.isAutocomplete()) {
       const slashCommand = container.slashCommands.find(
@@ -91,10 +95,14 @@ export class CoreSlashCommandHandle extends BaseEvent<"interactionCreate"> {
       if (slashCommand.autocompleteExecute) {
         try {
           await slashCommand.autocompleteExecute(interaction);
-        } catch {
+        } catch (error) {
           container.logger.error(
             `Failed to execute autocomplete for ${slashCommand.constructor.name}`
           );
+
+          if (!(error instanceof DiscordAPIError)) {
+            container.logger.error(error);
+          }
         }
       }
     }

@@ -4,6 +4,7 @@ import { container } from "@/index";
 import {
   ActionRowBuilder,
   type CollectedInteraction,
+  DiscordAPIError,
   InteractionCollector,
   type InteractionResponse,
   type Message,
@@ -132,8 +133,12 @@ export class BaseMenu<T> {
 
           await this.page.handleModal(interaction);
         }
-      } catch {
+      } catch (error) {
         container.logger.error("Failed to execute menu interaction");
+
+        if (!(error instanceof DiscordAPIError)) {
+          container.logger.error(error);
+        }
       }
 
       this.message = await interaction.fetchReply();

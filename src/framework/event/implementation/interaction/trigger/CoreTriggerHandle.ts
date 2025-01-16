@@ -7,6 +7,7 @@ import { container } from "@/index";
 import {
   type ButtonInteraction,
   type ChannelSelectMenuInteraction,
+  DiscordAPIError,
   type Interaction,
   type MentionableSelectMenuInteraction,
   MessageFlags,
@@ -90,7 +91,7 @@ export class CoreTriggerHandle extends BaseEvent<"interactionCreate"> {
 
     try {
       await trigger.execute(interaction);
-    } catch {
+    } catch (error) {
       if (interaction.deferred || interaction.replied) {
         interaction.editReply({
           embeds: [
@@ -113,6 +114,10 @@ export class CoreTriggerHandle extends BaseEvent<"interactionCreate"> {
       }
 
       container.logger.error(`Failed to execute ${type} trigger`);
+
+      if (!(error instanceof DiscordAPIError)) {
+        container.logger.error(error);
+      }
     }
   }
 

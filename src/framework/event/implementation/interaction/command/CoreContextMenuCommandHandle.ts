@@ -5,6 +5,7 @@ import type { BaseGuard, BaseGuardTypeMap } from "@/framework/guard/BaseGuard";
 import { ErrorEmbed } from "@/framework/utility/embeds/ErrorEmbed";
 import { container } from "@/index";
 import {
+  DiscordAPIError,
   type Interaction,
   type MessageContextMenuCommandInteraction,
   MessageFlags,
@@ -79,7 +80,7 @@ export class CoreContextMenuCommandHandle extends BaseEvent<"interactionCreate">
 
     try {
       await contextMenuCommand.execute(interaction);
-    } catch {
+    } catch (error) {
       if (interaction.deferred || interaction.replied) {
         interaction.editReply({
           embeds: [
@@ -104,6 +105,10 @@ export class CoreContextMenuCommandHandle extends BaseEvent<"interactionCreate">
       container.logger.error(
         `Failed to execute ${contextMenuCommand.constructor.name}`
       );
+
+      if (!(error instanceof DiscordAPIError)) {
+        container.logger.error(error);
+      }
     }
   }
 
