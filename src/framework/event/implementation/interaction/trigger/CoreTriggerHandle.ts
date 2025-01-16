@@ -77,7 +77,7 @@ export class CoreTriggerHandle extends BaseEvent<"interactionCreate"> {
       }
 
       if (failedGuards.length) {
-        interaction.reply({
+        return interaction.reply({
           embeds: [
             new ErrorEmbed(
               `You cannot use this ${type} due to a lack of guards`
@@ -85,13 +85,12 @@ export class CoreTriggerHandle extends BaseEvent<"interactionCreate"> {
           ],
           flags: MessageFlags.Ephemeral
         });
-        return;
       }
     }
 
     try {
       await trigger.execute(interaction);
-    } catch (error) {
+    } catch {
       if (interaction.deferred || interaction.replied) {
         interaction.editReply({
           embeds: [
@@ -114,7 +113,6 @@ export class CoreTriggerHandle extends BaseEvent<"interactionCreate"> {
       }
 
       container.logger.error(`Failed to execute ${type} trigger`);
-      container.logger.error(error);
     }
   }
 

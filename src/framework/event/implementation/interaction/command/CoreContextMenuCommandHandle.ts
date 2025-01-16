@@ -43,11 +43,10 @@ export class CoreContextMenuCommandHandle extends BaseEvent<"interactionCreate">
       .find(command => command.name === interaction.commandName);
 
     if (!contextMenuCommand) {
-      interaction.reply({
+      return interaction.reply({
         embeds: [new ErrorEmbed("Unable to find wanted context menu command")],
         flags: MessageFlags.Ephemeral
       });
-      return;
     }
 
     if (contextMenuCommand.guards) {
@@ -67,7 +66,7 @@ export class CoreContextMenuCommandHandle extends BaseEvent<"interactionCreate">
       }
 
       if (failedGuards.length) {
-        interaction.reply({
+        return interaction.reply({
           embeds: [
             new ErrorEmbed(
               "You cannot use this context menu command due to a lack of guards"
@@ -75,13 +74,12 @@ export class CoreContextMenuCommandHandle extends BaseEvent<"interactionCreate">
           ],
           flags: MessageFlags.Ephemeral
         });
-        return;
       }
     }
 
     try {
       await contextMenuCommand.execute(interaction);
-    } catch (error) {
+    } catch {
       if (interaction.deferred || interaction.replied) {
         interaction.editReply({
           embeds: [
@@ -106,7 +104,6 @@ export class CoreContextMenuCommandHandle extends BaseEvent<"interactionCreate">
       container.logger.error(
         `Failed to execute ${contextMenuCommand.constructor.name}`
       );
-      container.logger.error(error);
     }
   }
 

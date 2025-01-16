@@ -19,11 +19,10 @@ export class CoreSlashCommandHandle extends BaseEvent<"interactionCreate"> {
       );
 
       if (!slashCommand) {
-        interaction.reply({
+        return interaction.reply({
           embeds: [new ErrorEmbed("Unable to find wanted slash command")],
           flags: MessageFlags.Ephemeral
         });
-        return;
       }
 
       if (slashCommand.guards) {
@@ -43,7 +42,7 @@ export class CoreSlashCommandHandle extends BaseEvent<"interactionCreate"> {
         }
 
         if (failedGuards.length) {
-          interaction.reply({
+          return interaction.reply({
             embeds: [
               new ErrorEmbed(
                 "You cannot use this slash command due to a lack of guards"
@@ -51,13 +50,12 @@ export class CoreSlashCommandHandle extends BaseEvent<"interactionCreate"> {
             ],
             flags: MessageFlags.Ephemeral
           });
-          return;
         }
       }
 
       try {
         await slashCommand.execute(interaction);
-      } catch (error) {
+      } catch {
         if (interaction.deferred || interaction.replied) {
           interaction.editReply({
             embeds: [
@@ -82,7 +80,6 @@ export class CoreSlashCommandHandle extends BaseEvent<"interactionCreate"> {
         container.logger.error(
           `Failed to execute ${slashCommand.constructor.name}`
         );
-        container.logger.error(error);
       }
     } else if (interaction.isAutocomplete()) {
       const slashCommand = container.slashCommands.find(
@@ -94,11 +91,10 @@ export class CoreSlashCommandHandle extends BaseEvent<"interactionCreate"> {
       if (slashCommand.autocompleteExecute) {
         try {
           await slashCommand.autocompleteExecute(interaction);
-        } catch (error) {
+        } catch {
           container.logger.error(
             `Failed to execute autocomplete for ${slashCommand.constructor.name}`
           );
-          container.logger.error(error);
         }
       }
     }

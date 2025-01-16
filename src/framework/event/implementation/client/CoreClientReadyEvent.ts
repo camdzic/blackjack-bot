@@ -25,6 +25,9 @@ export class CoreClientReadyEvent extends BaseEvent<"ready"> {
 
     process.on("unhandledRejection", error => container.logger.error(error));
     process.on("uncaughtException", error => container.logger.error(error));
+    process.on("uncaughtExceptionMonitor", error =>
+      container.logger.error(error)
+    );
   }
 
   private async registerCommands() {
@@ -35,10 +38,9 @@ export class CoreClientReadyEvent extends BaseEvent<"ready"> {
     try {
       if (container.settings.getBoolean("commands.global")) {
         if (!container.client.application) {
-          container.logger.warn(
+          return container.logger.warn(
             "Application is not available, no commands will be registered"
           );
-          return;
         }
 
         await container.client.application.commands.set(commands);
@@ -48,10 +50,9 @@ export class CoreClientReadyEvent extends BaseEvent<"ready"> {
         );
 
         if (!guild) {
-          container.logger.warn(
+          return container.logger.warn(
             "Guild is not available, no commands will be registered"
           );
-          return;
         }
 
         await guild.commands.set(commands);

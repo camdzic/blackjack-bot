@@ -132,9 +132,8 @@ export class BaseMenu<T> {
 
           await this.page.handleModal(interaction);
         }
-      } catch (error) {
+      } catch {
         container.logger.error("Failed to execute menu interaction");
-        container.logger.error(error);
       }
 
       this.message = await interaction.fetchReply();

@@ -61,13 +61,12 @@ export class CoreComponentHandle extends BaseEvent<"interactionCreate"> {
       component.allowedExecutorIds.length &&
       !component.allowedExecutorIds.includes(interaction.user.id)
     ) {
-      interaction.reply({
+      return interaction.reply({
         embeds: [
           new ErrorEmbed("This component is meant for someone else to execute")
         ],
         flags: MessageFlags.Ephemeral
       });
-      return;
     }
 
     try {
@@ -94,7 +93,7 @@ export class CoreComponentHandle extends BaseEvent<"interactionCreate"> {
       } else {
         stop();
       }
-    } catch (error) {
+    } catch {
       if (interaction.deferred || interaction.replied) {
         interaction.editReply({
           embeds: [
@@ -117,7 +116,6 @@ export class CoreComponentHandle extends BaseEvent<"interactionCreate"> {
       }
 
       container.logger.error(`Failed to execute ${type} component`);
-      container.logger.error(error);
     }
   }
 }

@@ -40,10 +40,9 @@ export class Logger {
     const color = this.colors[type];
 
     if (typeof message !== "string" && !(message instanceof Error)) {
-      container.logger.error(
+      return container.logger.error(
         "Logger message must be a string or an instance of Error"
       );
-      return;
     }
 
     console.log(
