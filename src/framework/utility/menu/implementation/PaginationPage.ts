@@ -16,7 +16,7 @@ import {
   type User
 } from "discord.js";
 
-type MenuState = {
+type PaginationPageState = {
   interactor: User;
 };
 
@@ -24,7 +24,7 @@ type PaginationPageOptions = {
   pages: BaseMenuPageRenderResult[];
 };
 
-export class PaginationPage extends BaseMenuPage<MenuState> {
+export class PaginationPage extends BaseMenuPage<PaginationPageState> {
   pages: BaseMenuPageRenderResult[];
   currentPage: number;
 
@@ -39,7 +39,7 @@ export class PaginationPage extends BaseMenuPage<MenuState> {
     return {
       ...this.pages[this.currentPage],
       components: [
-        new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new ActionRowBuilder<ButtonBuilder>().setComponents(
           new ButtonBuilder()
             .setEmoji("⬅️")
             .setStyle(ButtonStyle.Primary)
@@ -74,8 +74,8 @@ export class PaginationPage extends BaseMenuPage<MenuState> {
         new ModalBuilder()
           .setTitle("Select Page")
           .setCustomId("selectPage")
-          .addComponents(
-            new ActionRowBuilder<TextInputBuilder>().addComponents(
+          .setComponents(
+            new ActionRowBuilder<TextInputBuilder>().setComponents(
               new TextInputBuilder()
                 .setLabel("Page Number")
                 .setPlaceholder("Enter a page number...")
