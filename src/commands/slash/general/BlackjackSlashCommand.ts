@@ -24,14 +24,14 @@ import {
   type User
 } from "discord.js";
 
-type MenuState = {
-  interactor: User;
-};
-
 type Result = {
   playerValue: number;
   dealerValue: number;
   finishedText: string | null;
+};
+
+type BlackjackPageState = {
+  interactor: User;
 };
 
 export class BlackjackSlashCommand extends BaseSlashCommand {
@@ -52,7 +52,7 @@ export class BlackjackSlashCommand extends BaseSlashCommand {
       this.decks.set(interaction.user.id, deck);
     }
 
-    const menu = new BaseMenu<MenuState>({
+    const menu = new BaseMenu<BlackjackPageState>({
       state: {
         interactor: interaction.user
       },
@@ -65,16 +65,16 @@ export class BlackjackSlashCommand extends BaseSlashCommand {
   }
 }
 
-class BlackjackPage extends BaseMenuPage<MenuState> {
+class BlackjackPage extends BaseMenuPage<BlackjackPageState> {
   private deck: Card[];
 
   private playerHand: Card[] = [];
   private dealerHand: Card[] = [];
 
-  private attachment: AttachmentBuilder | null = null;
-
   private gameInProgress = true;
-  private overallResult: "win" | "lose" | "tie" | null = null;
+  private overallResult: "win" | "lose" | "tie" | "incomplete" = "incomplete";
+
+  private attachment: AttachmentBuilder;
 
   constructor(deck: Card[]) {
     super();
@@ -109,7 +109,7 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
             "Use `hit` to draw a card or `stand` to end your turn."
           )
           .setFooter(
-            this.overallResult === null && this.deck.length
+            this.overallResult === "incomplete" && this.deck.length
               ? {
                   text: `${this.deck.length} cards remaining in the deck`
                 }
@@ -118,7 +118,7 @@ class BlackjackPage extends BaseMenuPage<MenuState> {
           .setImage(`attachment://${this.attachment.name}`)
           .setColor(
             // biome-ignore format: <explanation>
-            this.overallResult === null
+            this.overallResult === "incomplete"
               ? container.settings.getString("colors.primary") as ColorResolvable
               : this.overallResult === "tie" ? "Orange" :
                 this.overallResult === "win" ? 

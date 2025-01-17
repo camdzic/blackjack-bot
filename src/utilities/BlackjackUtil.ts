@@ -178,16 +178,8 @@ function drawOverlay(context: SKRSContext2D, finishedText: string) {
 }
 
 export function calculateHandValue(hand: Card[]) {
-  let totalValue = 0;
-  let aceCount = 0;
-
-  for (const card of hand) {
-    totalValue += card.rank.value;
-
-    if (card.rank.name === "ace") {
-      aceCount++;
-    }
-  }
+  let totalValue = hand.reduce((acc, card) => acc + card.rank.value, 0);
+  let aceCount = hand.filter(card => card.rank.name === "ace").length;
 
   while (aceCount > 0 && totalValue + 10 <= 21) {
     totalValue += 10;
@@ -200,9 +192,11 @@ export function calculateHandValue(hand: Card[]) {
 export function generateDeck() {
   const deck: Card[] = [];
 
-  for (const suit of suits) {
-    for (const rank of ranks) {
-      deck.push({ suit, rank, image: `${rank.name}_of_${suit}.png` });
+  for (let i = 0; i < 3; i++) {
+    for (const suit of suits) {
+      for (const rank of ranks) {
+        deck.push({ suit, rank, image: `${rank.name}_of_${suit}.png` });
+      }
     }
   }
 
